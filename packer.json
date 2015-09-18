@@ -1,0 +1,30 @@
+{
+  "variables": {
+    "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
+    "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
+    "instance_type": "m3.medium"
+  },
+  "builders": [{
+    "type": "amazon-ebs",
+    "ami_description": "Conjur Docker AMI",
+    "access_key": "{{user `aws_access_key`}}",
+    "secret_key": "{{user `aws_secret_key`}}",
+    "region": "us-east-1",
+    "source_ami": "ami-d05e75b8",
+    "instance_type": "{{user `instance_type`}}",
+    "ssh_username": "ubuntu",
+    "ami_name": "conjur-docker-{{timestamp}}",
+    "launch_block_device_mappings": [{
+      "device_name": "/dev/sda1",
+      "snapshot_id": "snap-4e3c6d2b",
+      "delete_on_termination": true,
+      "volume_size": 120
+    }]
+  }],
+  "provisioners": [
+    {
+      "type": "shell",
+      "scripts": ["scripts/dist-upgrade.sh", "scripts/image-extra.sh"]
+    }
+  ]
+}
