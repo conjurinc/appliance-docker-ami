@@ -1,10 +1,8 @@
 #!/usr/bin/env bash -e
+IMAGE_TAG=${IMAGE_TAG-latest}
 
-conjur proxy -p9909 https://docker-registry.itci.conjur.net > /dev/null 2>&1 &
-proxy_pid=$!
+docker pull registry.tld/conjur-appliance:${IMAGE_TAG}
+imageid=$(docker images | grep -E "^registry.tld/conjur-appliance.*${IMAGE_TAG}" | awk '{print $3}')
+docker save ${imageid} > conjur-appliance.tar
 
-sleep 5
-docker -H localhost:9909 pull conjurinc-appliance:latest
-# conjur env run -c secrets.yml -- packer build packer.json
-
-sudo kill $proxy_pid
+packer build packer.json

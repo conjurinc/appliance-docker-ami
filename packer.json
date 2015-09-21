@@ -23,8 +23,21 @@
   }],
   "provisioners": [
     {
+      "type": "file",
+      "source": "conjur-appliance.tar",
+      "destination": "/tmp/conjur-appliance.tar"
+    },
+    {
       "type": "shell",
       "scripts": ["scripts/dist-upgrade.sh", "scripts/image-extra.sh"]
+    },
+    {
+      "type": "shell",
+      "scripts": ["scripts/provision.sh"]
+    },
+    {
+      "type": "shell",
+      "inline": ["rm -f /tmp/conjur-appliance.tar"]
     }
   ]
 }
