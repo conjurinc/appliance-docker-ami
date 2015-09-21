@@ -1,4 +1,6 @@
-#!/usr/bin/env bash -e
+#!/bin/bash
+set -e
+
 IMAGE_TAG=${IMAGE_TAG-latest}
 
 docker pull registry.tld/conjur-appliance:${IMAGE_TAG}
