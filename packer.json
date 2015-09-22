@@ -23,21 +23,23 @@
   }],
   "provisioners": [
     {
+      "type": "shell",
+      "scripts": ["scripts/dist-upgrade.sh", "scripts/image-extra.sh"],
+      "execute_command": "{{ .Vars }} sudo -E bash '{{ .Path }}'"
+    },
+    {
       "type": "file",
       "source": "conjur-appliance.tar",
-      "destination": "/opt/conjur-appliance.tar"
+      "destination": "/tmp/conjur-appliance.tar"
     },
     {
       "type": "shell",
-      "scripts": ["scripts/dist-upgrade.sh", "scripts/image-extra.sh"]
+      "scripts": ["scripts/provision.sh"],
+      "execute_command": "{{ .Vars }} sudo -E bash '{{ .Path }}'"
     },
     {
       "type": "shell",
-      "scripts": ["scripts/provision.sh"]
-    },
-    {
-      "type": "shell",
-      "inline": ["rm -f /opt/conjur-appliance.tar"]
+      "inline": ["rm -f /tmp/conjur-appliance.tar"]
     }
   ]
 }
