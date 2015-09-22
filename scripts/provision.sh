@@ -14,4 +14,4 @@ sudo apt-get update
 sudo apt-get install -y docker-engine
 
 echo "Loading Conjur appliance image into Docker"
-sudo docker load < '/tmp/conjur-appliance.tar'
+sudo docker load < '/opt/conjur-appliance.tar'

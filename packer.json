@@ -25,7 +25,7 @@
     {
       "type": "file",
       "source": "conjur-appliance.tar",
-      "destination": "/tmp/conjur-appliance.tar"
+      "destination": "/opt/conjur-appliance.tar"
     },
     {
       "type": "shell",
@@ -37,7 +37,7 @@
     },
     {
       "type": "shell",
-      "inline": ["rm -f /tmp/conjur-appliance.tar"]
+      "inline": ["rm -f /opt/conjur-appliance.tar"]
     }
   ]
 }
