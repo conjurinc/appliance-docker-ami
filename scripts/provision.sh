@@ -2,7 +2,7 @@
 
 set -e
 
-CONJUR_CLI_VERSION='4.27.0'
+CONJUR_CLI_VERSION=${CONJUR_CLI_VERSION-'4.27.0'}
 
 # Install Docker
 apt-key adv \
@@ -27,10 +27,11 @@ docker load < '/tmp/conjur-appliance.tar'
 container_name='conjur-appliance'
 
 docker rm -f ${container_name} || true  # Try to remove the container, even if it doesn't exist
-docker create \
+cid=$(docker create \
 --name ${container_name} \
 --restart always \
-registry.tld/conjur-appliance
+-p "443:443" -p "636:636" -p "5432:5432" \
+registry.tld/conjur-appliance)
 
 cat << CONF > /etc/init/conjur.conf
 description "Conjur server"
@@ -39,7 +40,7 @@ start on filesystem and started docker
 stop on runlevel [!2345]
 respawn
 script
-  /usr/bin/docker start -a ${container_name}
+  /usr/bin/docker start -a ${cid}
 end script
 CONF
 
