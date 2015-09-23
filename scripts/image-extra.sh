@@ -1,2 +1,4 @@
 #!/bin/bash -ex
-apt-get update && apt-get install -y linux-image-extra-$(uname -r)
+version=$(uname -r)
+apt-get install -y linux-image-extra-$version
+apt-mark hold linux-image-$version linux-image-extra-$version
