@@ -26,7 +26,7 @@ docker load < '/tmp/conjur-appliance.tar'
 
 container_name='conjur-appliance'
 
-docker rm -f ${container_name} || true  # Try to remove the container, even if it doesn't exist
+docker rm -f ${container_name} && true  # Try to remove the container, even if it doesn't exist
 cid=$(docker create \
 --name ${container_name} \
 --restart always \

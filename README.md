@@ -23,12 +23,13 @@ docker pull registry.tld/conjur-appliance:${IMAGE_TAG}
 docker save registry.tld/conjur-appliance:${IMAGE_TAG} > conjur-appliance.tar
 
 vagrant up
-vagrant ssh -c "sudo /vagrant/scripts/dist-upgrade.sh"
-vagrant ssh -c "sudo /vagrant/scripts/image-extra.sh"
+vagrant ssh -c "sudo apt-get update && sudo apt-get dist-upgrade -y" # choose /boot at the GRUB update menu
 vagrant reload
+vagrant ssh -c "sudo /vagrant/scripts/image-extra.sh"
 
 vagrant ssh
   sudo su -
+  cp /vagrant/conjur-appliance.tar /tmp/
   bash /vagrant/scripts/provision.sh
 
   hostname=conjur.docker
