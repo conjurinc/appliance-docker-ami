@@ -30,7 +30,7 @@ docker rm -f ${container_name} || true  # Try to remove the container, even if i
 cid=$(docker create \
 --name ${container_name} \
 --restart always \
--p "443:443" -p "636:636" -p "5432:5432" \
+-p "443:443" -p "636:636" -p "5432:5432" -p "38053:38053" \
 registry.tld/conjur-appliance)
 
 cat << CONF > /etc/init/conjur.conf
@@ -43,5 +43,3 @@ script
   /usr/bin/docker start -a ${cid}
 end script
 CONF
-
-service conjur restart
