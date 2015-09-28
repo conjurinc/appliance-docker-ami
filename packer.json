@@ -23,11 +23,6 @@
   }],
   "provisioners": [
     {
-      "type": "shell",
-      "scripts": ["scripts/dist-upgrade.sh", "scripts/image-extra.sh"],
-      "execute_command": "{{ .Vars }} sudo -E bash '{{ .Path }}'"
-    },
-    {
       "type": "file",
       "source": "conjur-appliance.tar",
       "destination": "/tmp/conjur-appliance.tar"
