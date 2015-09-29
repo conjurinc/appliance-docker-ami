@@ -1,4 +1,5 @@
 #!/bin/bash
+set -ex
 
 export PATH=/opt/conjur/bin:$PATH
 
