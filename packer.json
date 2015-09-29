@@ -2,7 +2,8 @@
   "variables": {
     "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
     "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
-    "instance_type": "m3.medium"
+    "instance_type": "m3.medium",
+    "appliance_image_tag": "latest"
   },
   "builders": [{
     "type": "amazon-ebs",
@@ -29,6 +30,7 @@
     {
       "type": "shell",
       "scripts": ["scripts/provision.sh"],
+      "environment_vars": ["APPLIANCE_IMAGE_TAG={{user `appliance_image_tag`}}"],
       "execute_command": "{{ .Vars }} sudo -E bash '{{ .Path }}'"
     },
     {

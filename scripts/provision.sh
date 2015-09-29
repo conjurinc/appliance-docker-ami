@@ -1,9 +1,8 @@
 #!/bin/bash
-
-set -e
+set -ex
 
 CONJUR_CLI_VERSION=${CONJUR_CLI_VERSION-'4.27.0'}
-
+APPLIANCE_IMAGE_TAG=${APPLIANCE_IMAGE_TAG-latest}
 # Install Docker
 apt-key adv \
 --keyserver hkp://p80.pool.sks-keyservers.net:80 \
@@ -31,7 +30,7 @@ cid=$(docker create \
 --name ${container_name} \
 --restart always \
 -p "443:443" -p "636:636" -p "5432:5432" -p "38053:38053" \
-registry.tld/conjur-appliance)
+registry.tld/conjur-appliance:${APPLIANCE_IMAGE_TAG})
 
 cat << CONF > /etc/init/conjur.conf
 description "Conjur server"
