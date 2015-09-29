@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-APPLIANCE_IMAGE=${APPLIANCE_IMAGE-registry.tld:80/conjur-appliance}
-APPLIANCE_IMAGE_TAG=${APPLIANCE_IMAGE_TAG-latest}
+APPLIANCE_IMAGE=${1-registry.tld/conjur-appliance}
+APPLIANCE_IMAGE_TAG=${2-latest}
 
 IMAGE_TAG=${IMAGE_TAG-latest}
 
