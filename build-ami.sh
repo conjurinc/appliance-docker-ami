@@ -9,4 +9,5 @@ docker save ${APPLIANCE_IMAGE}:${APPLIANCE_IMAGE_TAG} > conjur-appliance.tar
 
 packer build \
 -var "appliance_image_tag=${APPLIANCE_IMAGE_TAG}" \
-packer.json
+packer.json \
+| tee packer.out
