@@ -18,12 +18,13 @@ echo "Testing health endpoint"
 
 public_hostname=$(cat .kitchen/default-ubuntu-1404.yml | grep hostname | awk -F ' ' '{print $2}')
 
-resp=$(curl -sSk https://${public_hostname}/health)
-good_resp='{"services":{"host-factory":"ok","core":"ok","pubkeys":"ok","audit":"ok","authz":"ok","authn":"ok","ldap":"ok","ok":true},"database":{"ok":true,"connect":{"main":"ok"}},"ok":true}'
+response_code=$(curl -k -s -o health.response -w "%{http_code}" https://${public_hostname}/health)
 
-if [ "${resp}" != "${good_resp}" ]; then
-  echo -e "Expected \n ${good_resp}"
-  echo -e "Got \n ${resp}"
+if [ "${response_code}" != "200" ]; then
+  echo "Expected 200"
+  echo "Got ${response_code}"
+  echo ""
+  echo $(cat health.response)
   exit 1
 fi
 
