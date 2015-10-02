@@ -9,8 +9,6 @@ driver:
   require_chef_omnibus: false
   flavor_id: m3.large
   instance_type: m3.large
-  # associate_public_ip: true
-  # interface: dns
 
 provisioner:
   name: shell
