@@ -1,0 +1,29 @@
+# Works with kitchen-ec2 v0.8.0
+---
+driver:
+  name: ec2
+  security_group_ids: ['sg-45fdda28']
+  region: us-east-1
+  aws_ssh_key_id: test-kitchen
+  ssh_key: <%= ENV['SSH_KEY'] %>
+  require_chef_omnibus: false
+  flavor_id: m3.large
+  instance_type: m3.large
+  # associate_public_ip: true
+  # interface: dns
+
+provisioner:
+  name: shell
+
+platforms:
+  - name: ubuntu-14.04
+    driver:
+      image_id: <%= ENV['AMI_ID'] %>
+      username: ubuntu
+      block_device_mappings:
+        - ebs_device_name: /dev/sda1
+          ebs_volume_size: 20
+          ebs_delete_on_termination: true
+
+suites:
+  - name: default
