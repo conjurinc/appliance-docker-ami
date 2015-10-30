@@ -39,6 +39,6 @@ start on filesystem and started docker
 stop on runlevel [!2345]
 respawn
 script
-  /usr/bin/docker start -a ${cid}
+  /usr/bin/docker start -a ${container_name}
 end script
 CONF
