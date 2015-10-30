@@ -14,6 +14,9 @@ apt-get update
 
 apt-get install -y docker-engine
 
+# Enable the 'ubuntu' user to manage docker without sudo
+usermod -a -G docker ubuntu
+
 cli_dlpath='/tmp/conjur.deb'
 wget -q \
 "https://s3.amazonaws.com/conjur-releases/omnibus/conjur_${CONJUR_CLI_VERSION}-1_amd64.deb" -O ${cli_dlpath} && \
