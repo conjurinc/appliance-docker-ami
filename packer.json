@@ -1,4 +1,5 @@
 {
+  "_baseami": "ami-478b262c = Ubuntu 14.04.3 LTS hvm-ssd",
   "variables": {
     "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
     "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
@@ -11,7 +12,7 @@
     "access_key": "{{user `aws_access_key`}}",
     "secret_key": "{{user `aws_secret_key`}}",
     "region": "us-east-1",
-    "source_ami": "ami-0fdf9a6a",
+    "source_ami": "ami-478b262c",
     "instance_type": "{{user `instance_type`}}",
     "ssh_username": "ubuntu",
     "ami_name": "conjur-docker-{{timestamp}}",
