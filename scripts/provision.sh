@@ -12,8 +12,13 @@ apt-key adv \
 bash -c 'echo "deb https://apt.dockerproject.org/repo ubuntu-trusty main" > /etc/apt/sources.list.d/docker.list'
 
 apt-get update
-apt-get install -y linux-image-extra-$(uname -r)
 
+# Installs security patches
+# http://packages.ubuntu.com/trusty-updates/unattended-upgrades
+apt-get install -y ntp unattended-upgrades
+unattended-upgrade -v
+
+apt-get install -y linux-image-extra-$(uname -r)
 apt-get install -y docker-engine
 
 docker run --rm hello-world
@@ -50,8 +55,3 @@ script
   /usr/bin/docker start -a ${container_name}
 end script
 CONF
-
-# Installs security patches
-# http://packages.ubuntu.com/trusty-updates/unattended-upgrades
-apt-get install -y ntp unattended-upgrades
-unattended-upgrade -v
