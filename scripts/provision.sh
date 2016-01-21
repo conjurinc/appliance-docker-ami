@@ -17,32 +17,33 @@ docker run --rm hello-world
 # Enable the 'ubuntu' user to manage docker without sudo
 usermod -a -G docker ubuntu
 
-# cli_dlpath='/tmp/conjur.deb'
-# wget -q \
-# "https://s3.amazonaws.com/conjur-releases/omnibus/conjur_${CONJUR_CLI_VERSION}-1_amd64.deb" -O ${cli_dlpath} && \
-# dpkg -i ${cli_dlpath} && \
-# rm -f ${cli_dlpath}
+cli_dlpath='/tmp/conjur.deb'
+wget -q \
+"https://s3.amazonaws.com/conjur-releases/omnibus/conjur_${CONJUR_CLI_VERSION}-1_amd64.deb" -O ${cli_dlpath} && \
+dpkg -i ${cli_dlpath} && \
+rm -f ${cli_dlpath}
 
-# echo "Loading Conjur appliance image into Docker"
-# docker load < '/tmp/conjur-appliance.tar'
+echo "Loading Conjur appliance image into Docker"
+gzip -d /tmp/conjur-appliance.tar.gz # Unzip the tar.gz into a tar
+docker load < '/tmp/conjur-appliance.tar'
 
-# container_name='conjur-appliance'
+container_name='conjur-appliance'
 
-# docker rm -f ${container_name} || true  # Try to remove the container, even if it doesn't exist
-# cid=$(docker create \
-# --name ${container_name} \
-# --restart always \
-# --log-driver=syslog --log-opt tag="${container_name}" \
-# -p "443:443" -p "636:636" -p "5432:5432" -p "38053:38053" \
-# registry.tld/conjur-appliance:${APPLIANCE_IMAGE_TAG})
+docker rm -f ${container_name} || true  # Try to remove the container, even if it doesn't exist
+cid=$(docker create \
+--name ${container_name} \
+--restart always \
+--log-driver=syslog --log-opt tag="${container_name}" \
+-p "443:443" -p "636:636" -p "5432:5432" -p "38053:38053" \
+registry.tld/conjur-appliance:${APPLIANCE_IMAGE_TAG})
 
-# cat << CONF > /etc/init/conjur.conf
-# description "Conjur server"
-# author "ConjurInc"
-# start on filesystem and started docker
-# stop on runlevel [!2345]
-# respawn
-# script
-#   /usr/bin/docker start -a ${container_name}
-# end script
-# CONF
+cat << CONF > /etc/init/conjur.conf
+description "Conjur server"
+author "ConjurInc"
+start on filesystem and started docker
+stop on runlevel [!2345]
+respawn
+script
+  /usr/bin/docker start -a ${container_name}
+end script
+CONF

@@ -1,4 +1,4 @@
 health.response
 .kitchen
 .vagrant
-*.tar
+*.tar*

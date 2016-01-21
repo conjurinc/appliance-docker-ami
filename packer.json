@@ -1,5 +1,5 @@
 {
-  "_baseami": "ami-dab791b0 generated in ./base_ami",
+  "_baseami": "'source_ami' created in ./base_ami",
   "variables": {
     "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
     "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
@@ -12,7 +12,7 @@
     "access_key": "{{user `aws_access_key`}}",
     "secret_key": "{{user `aws_secret_key`}}",
     "region": "us-east-1",
-    "source_ami": "ami-dab791b0",
+    "source_ami": "ami-50b0963a",
     "instance_type": "{{user `instance_type`}}",
     "ssh_username": "ubuntu",
     "ami_name": "conjur-docker-{{timestamp}}",
@@ -24,10 +24,19 @@
   }],
   "provisioners": [
     {
+      "type": "file",
+      "source": "conjur-appliance.tar.gz",
+      "destination": "/tmp/conjur-appliance.tar.gz"
+    },
+    {
       "type": "shell",
       "scripts": ["scripts/provision.sh"],
       "environment_vars": ["APPLIANCE_IMAGE_TAG={{user `appliance_image_tag`}}"],
       "execute_command": "{{ .Vars }} sudo -E bash '{{ .Path }}'"
+    },
+    {
+      "type": "shell",
+      "inline": ["rm -f /tmp/conjur-appliance.tar*"]
     }
   ]
 }
