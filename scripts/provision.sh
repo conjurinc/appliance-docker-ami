@@ -17,6 +17,9 @@ docker run --rm hello-world
 # Enable the 'ubuntu' user to manage docker without sudo
 usermod -a -G docker ubuntu
 
+# Install fail2ban to stop malicious attackers
+apt-get install -y fail2ban
+
 cli_dlpath='/tmp/conjur.deb'
 wget -q \
 "https://s3.amazonaws.com/conjur-releases/omnibus/conjur_${CONJUR_CLI_VERSION}-1_amd64.deb" -O ${cli_dlpath} && \
