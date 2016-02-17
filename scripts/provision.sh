@@ -3,6 +3,7 @@ set -ex
 
 CONJUR_CLI_VERSION=${CONJUR_CLI_VERSION-'4.29.0'}
 APPLIANCE_IMAGE_TAG=${APPLIANCE_IMAGE_TAG-latest}
+DOCKER_VERSION='1.9.1-0~trusty'
 
 # Install Docker
 apt-key adv \
@@ -11,7 +12,7 @@ apt-key adv \
 bash -c 'echo "deb https://apt.dockerproject.org/repo ubuntu-trusty main" > /etc/apt/sources.list.d/docker.list'
 apt-get update
 apt-get install -y linux-image-extra-$(uname -r)
-apt-get install -y docker-engine
+apt-get install -y docker-engine=$DOCKER_VERSION
 docker run --rm hello-world
 
 # Enable the 'ubuntu' user to manage docker without sudo
