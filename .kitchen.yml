@@ -6,7 +6,7 @@ driver:
   region: us-east-1
   aws_ssh_key_id: test-kitchen
   require_chef_omnibus: false
-  instance_type: m3.large
+  instance_type: m3.medium
   tags:
     kitchen-test: "appliance-docker"
 
@@ -22,9 +22,10 @@ platforms:
     driver:
       image_id: <%= ENV['AMI_ID'] %>
       block_device_mappings:
-        - ebs_device_name: /dev/sda1
-          ebs_volume_size: 20
-          ebs_delete_on_termination: true
+        - device_name: /dev/sda1
+          ebs:
+            volume_size: 20
+            delete_on_termination: true
 
 suites:
   - name: default
