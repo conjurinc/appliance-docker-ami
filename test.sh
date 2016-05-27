@@ -5,14 +5,14 @@ ami_id=${1}
 
 function finish {
   code=$?
-  conjur env run -c secrets.yml -- env AMI_ID=${ami_id} kitchen destroy
+  summon env AMI_ID=${ami_id} chef exec kitchen destroy
   return ${code}
 }
 trap finish EXIT
 
 echo "Launching test instance from ${ami_id}"
 
-conjur env run -c secrets.yml -- env AMI_ID=${ami_id} kitchen converge
+summon env AMI_ID=${ami_id} chef exec kitchen converge
 
 echo "Testing health endpoint"
 
