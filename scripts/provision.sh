@@ -34,6 +34,11 @@ docker load < '/tmp/conjur-appliance.tar'
 container_name='conjur-appliance'
 
 docker rm -f ${container_name} || true  # Try to remove the container, even if it doesn't exist
+
+# Pull the Conjur UI, for caching
+docker pull conjurinc/conjur-ui
+
+# Start the appliance
 cid=$(docker create \
 --name ${container_name} \
 --restart always \
