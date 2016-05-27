@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-CONJUR_CLI_VERSION=${CONJUR_CLI_VERSION-'4.29.0'}
+CONJUR_CLI_VERSION=${CONJUR_CLI_VERSION-'5.2.0'}
 APPLIANCE_IMAGE_TAG=${APPLIANCE_IMAGE_TAG-latest}
 DOCKER_VERSION='1.9.1-0~trusty'
 
@@ -38,6 +38,7 @@ cid=$(docker create \
 --name ${container_name} \
 --restart always \
 --log-driver=syslog --log-opt tag="${container_name}" \
+-v /var/log/conjur/audit.messages:/var/log/conjur/audit.messages \
 -p "443:443" -p "636:636" -p "5432:5432" -p "127.0.0.1:38053:38053" \
 registry.tld/conjur-appliance:${APPLIANCE_IMAGE_TAG})
 
