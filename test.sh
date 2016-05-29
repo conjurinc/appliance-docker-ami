@@ -18,6 +18,8 @@ echo "Testing health endpoint"
 
 public_hostname=$(cat .kitchen/default-ubuntu-1404.yml | grep hostname | awk -F ' ' '{print $2}')
 
+sleep 5
+
 response_code=$(curl -k -s -o health.response -w "%{http_code}" https://${public_hostname}/health)
 
 if [ "${response_code}" != "200" ]; then
