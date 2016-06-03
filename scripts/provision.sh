@@ -43,7 +43,8 @@ cid=$(docker create \
 --name ${container_name} \
 --restart always \
 --log-driver=syslog --log-opt tag="${container_name}" \
--v /var/log/conjur/audit.messages:/var/log/conjur/audit.messages \
+-v /var/log/conjur:/var/log/conjur \
+-v /opt/conjur/backup:/opt/conjur/backup \
 -p "443:443" -p "636:636" -p "5432:5432" -p "5433:5433" -p "127.0.0.1:38053:38053" \
 registry.tld/conjur-appliance:${APPLIANCE_IMAGE_TAG})
 
