@@ -19,7 +19,7 @@ docker run --rm hello-world
 usermod -a -G docker ubuntu
 
 # Install fail2ban to stop malicious attackers
-apt-get install -y fail2ban
+apt-get install -y fail2ban ntp
 
 cli_dlpath='/tmp/conjur.deb'
 wget -q \
