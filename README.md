@@ -11,7 +11,19 @@ run to prepare the image.
 Feel free to fork this repository and update the packer scripts
 as needed to generate images for your platform.
 
-## Platforms
+## Prerequisites
+
+1. Save the Conjur Docker image to this project directory as `conjur-appliance.tar.gz`. If you have the image uploaded to an internal repository, save it like so:
+
+    ```
+    docker pull myregistry/conjur-appliance:4.7.3
+    docker save myregistry/conjur-appliance:4.7.3 > conjur-appliance.tar
+    gzip conjur-appliance.tar
+    ```
+2. Install [packer](https://www.packer.io/).
+3. If you are modifying this project, install [Vagrant](https://www.vagrantup.com/) to test your changes locally.
+
+## Usage
 
 ### Amazon EC2
 
@@ -28,35 +40,37 @@ Modify [packer.json](packer.json) to use the
 
 ---
 
+## How it works
+
+Given a Conjur Docker image, `conjur-appliance.tar.gz`, packer runs
+[scripts/provision.sh](scripts/provision.sh), which:
+
+1. Installs Docker
+2. Installs the [Conjur CLI](https://developer.conjur.net/cli)
+3. Installs and starts fail2ban and ntp
+4. Creates a container from the Conjur Docker image
+5. Creates a service that will start this container on system boot
+
 ## Development
 
-You can test these scripts with Vagrant.
+You can test these scripts locally against a VM with Vagrant. Ensure you have
+`conjur-appliance.tar.gz` in your project directory and run `vagrant up`.
 
-Set up your Docker registry proxy according to
-[this doc](https://docs.google.com/document/d/1aNVKG_Yq74mdAheW5_v9YqwDtrGZuxPyx0TUY2jXwnw/edit).
+Vagrant will:
 
-```
-IMAGE_TAG=${IMAGE_TAG-latest}
+1. Copy `conjur-appliance.tar.gz` into the VM.
+2. Run [scripts/provision.sh](scripts/provision.sh).
+3. Run [bootstrap_vagrant.sh](bootstrap_vagrant.sh), configuring Conjur appliance and CLI.
 
-docker pull registry.tld/conjur-appliance:${IMAGE_TAG}
-docker save registry.tld/conjur-appliance:${IMAGE_TAG} > conjur-appliance.tar
+After the machine is provisioned, SSH in.
+You are already connected and authenticated with the Conjur CLI as user 'admin'.
 
-vagrant up
-vagrant ssh -c "sudo apt-get update && sudo apt-get dist-upgrade -y" # choose /boot at the GRUB update menu
-vagrant reload
-vagrant ssh -c "sudo /vagrant/scripts/image-extra.sh"
+```sh
+$ vagrant ssh
+Welcome to Ubuntu 14.04.5 LTS (GNU/Linux 3.13.0-93-generic x86_64)...
 
-vagrant ssh
-  sudo su -
-  cp /vagrant/conjur-appliance.tar /tmp/
-  bash /vagrant/scripts/provision.sh
-
-  hostname=conjur.docker
-  password=secret
-  orgaccount=dev
-  docker exec conjur-appliance evoke configure master -h $hostname -p $password $orgaccount
-
-  echo '127.0.0.1 conjur.docker' >> /etc/hosts
+$ conjur authn whoami
+{"account":"vagrant","username":"admin"}
 ```
 
-Logs are in `/var/log/upstart/conjur.log`.
+`/var/log/syslog` on the Vagrant VM contains all logs from the Conjur container.
