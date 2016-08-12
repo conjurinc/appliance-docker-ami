@@ -1,13 +1,32 @@
 # appliance-docker
-Docker build of the Conjur appliance
 
-## AMI
+Packages the Conjur Docker image into machine images for different platforms.
+
+This project uses [packer](https://www.packer.io/) to create images that run
+the Conjur appliance Docker image. Since we are using packer, images for several different
+platforms can be built by adding to the `builders` section of [packer.json](packer.json).
+[scripts/provision.sh](scripts/provision.sh) contains a series of bash commands that are
+run to prepare the image.
+
+Feel free to fork this repository and update the packer scripts
+as needed to generate images for your platform.
+
+## Platforms
+
+### Amazon EC2
 
 To build an AMI, run:
 
 ```
 ./build-ami.sh
 ```
+
+### OpenStack
+
+Modify [packer.json](packer.json) to use the
+[OpenStack builder](https://www.packer.io/docs/builders/openstack.html).
+
+---
 
 ## Development
 
