@@ -45,11 +45,8 @@ Modify [packer.json](packer.json) to use the
 Given a Conjur Docker image, `conjur-appliance.tar.gz`, packer runs
 [scripts/provision.sh](scripts/provision.sh), which:
 
-1. Installs Docker
-2. Installs the [Conjur CLI](https://developer.conjur.net/cli)
-3. Installs and starts fail2ban and ntp
-4. Creates a container from the Conjur Docker image
-5. Creates a service that will start this container on system boot
+1. Creates a container from the Conjur Docker image
+2. Creates a systemd service that will start this container on system boot
 
 ## Development
 
@@ -60,7 +57,6 @@ Vagrant will:
 
 1. Copy `conjur-appliance.tar.gz` into the VM.
 2. Run [scripts/provision.sh](scripts/provision.sh).
-3. Run [bootstrap_vagrant.sh](bootstrap_vagrant.sh), configuring Conjur appliance and CLI.
 
 After the machine is provisioned, SSH in.
 You are already connected and authenticated with the Conjur CLI as user 'admin'.
