@@ -32,8 +32,8 @@ After=docker.service
 Requires=docker.service
 
 [Service]
-TimeoutStartSec=10
-RestartSec=10
+TimeoutStartSec=30
+RestartSec=30
 ExecStartPre=/usr/bin/docker stop ${container_name}
 ExecStart=/usr/bin/docker start -a ${container_name}
 
