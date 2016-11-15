@@ -22,7 +22,7 @@ platforms:
     driver:
       image_id: <%= ENV['AMI_ID'] %>
       block_device_mappings:
-        - device_name: /dev/sda1
+        - device_name: /dev/xvda
           ebs:
             volume_size: 20
             delete_on_termination: true
