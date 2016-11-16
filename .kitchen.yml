@@ -6,7 +6,7 @@ driver:
   region: us-east-1
   aws_ssh_key_id: test-kitchen
   require_chef_omnibus: false
-  instance_type: m3.medium
+  instance_type: m3.large
   tags:
     kitchen-test: "appliance-docker"
 
