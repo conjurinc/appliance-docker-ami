@@ -3,7 +3,7 @@
 
 ami_id=${1}
 
-function finish {
+finish() {
   code=$?
   summon env AMI_ID=${ami_id} chef exec kitchen destroy
   return ${code}
