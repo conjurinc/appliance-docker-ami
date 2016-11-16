@@ -12,7 +12,7 @@ trap finish EXIT
 
 echo "Launching test instance from ${ami_id}"
 
-summon env AMI_ID=${ami_id} chef exec kitchen converge
+summon env AMI_ID=${ami_id} chef exec kitchen create
 
 echo "Testing health endpoint"
 

@@ -32,10 +32,9 @@ After=docker.service
 Requires=docker.service
 
 [Service]
-TimeoutStartSec=30
-RestartSec=30
-ExecStartPre=/usr/bin/docker stop ${container_name}
+TimeoutStartSec=0
 ExecStart=/usr/bin/docker start -a ${container_name}
+ExecStop=-/usr/bin/docker stop ${container_name}
 
 [Install]
 WantedBy=multi-user.target
