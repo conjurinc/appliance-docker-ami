@@ -64,12 +64,12 @@ The systemd unit file is placed at `/etc/systemd/system/conjur.service`. The boo
 
 ```
 # View service status
-systemctl status conjur.service
+systemctl status conjur
 
 # Start/stop/restart service
-sudo systemctl start conjur.service
-sudo systemctl stop conjur.service
-sudo systemctl restart conjur.service
+sudo systemctl start conjur
+sudo systemctl stop conjur
+sudo systemctl restart conjur
 ```
 
 #### Logs
