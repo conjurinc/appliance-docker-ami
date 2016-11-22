@@ -3,7 +3,7 @@
 
 ami_id=${1}
 
-function finish {
+finish() {
   code=$?
   summon env AMI_ID=${ami_id} chef exec kitchen destroy
   return ${code}
@@ -16,7 +16,7 @@ summon env AMI_ID=${ami_id} chef exec kitchen converge
 
 echo "Testing health endpoint"
 
-public_hostname=$(cat .kitchen/default-ubuntu-1404.yml | grep hostname | awk -F ' ' '{print $2}')
+public_hostname=$(cat .kitchen/default-coreos-stable.yml | grep hostname | awk -F ' ' '{print $2}')
 
 sleep 5
 

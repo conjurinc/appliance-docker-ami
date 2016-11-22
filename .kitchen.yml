@@ -6,23 +6,23 @@ driver:
   region: us-east-1
   aws_ssh_key_id: test-kitchen
   require_chef_omnibus: false
-  instance_type: m3.medium
+  instance_type: m3.large
   tags:
     kitchen-test: "appliance-docker"
 
 transport:
   ssh_key: <%= ENV['SSH_KEY'] %>
-  username: ubuntu
+  username: core
 
 provisioner:
   name: shell
 
 platforms:
-  - name: ubuntu-14.04
+  - name: coreos-stable
     driver:
       image_id: <%= ENV['AMI_ID'] %>
       block_device_mappings:
-        - device_name: /dev/sda1
+        - device_name: /dev/xvda
           ebs:
             volume_size: 20
             delete_on_termination: true

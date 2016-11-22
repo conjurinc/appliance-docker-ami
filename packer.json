@@ -1,42 +1,46 @@
 {
-  "_baseami": "'source_ami' created in ./base_ami",
   "variables": {
     "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
     "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
-    "instance_type": "m3.medium",
-    "appliance_image_tag": "latest"
+    "source_ami": "{{env `COREOS_AMI`}}",
+    "appliance_image_tag": null,
+    "instance_type": "m3.medium"
   },
   "builders": [{
     "type": "amazon-ebs",
-    "ami_description": "Conjur Docker AMI",
+    "ami_description": "Official Conjur AMI",
     "access_key": "{{user `aws_access_key`}}",
     "secret_key": "{{user `aws_secret_key`}}",
     "region": "us-east-1",
-    "source_ami": "ami-50b0963a",
+    "source_ami": "{{user `source_ami`}}",
     "instance_type": "{{user `instance_type`}}",
-    "ssh_username": "ubuntu",
-    "ami_name": "conjur-docker-{{timestamp}}",
+    "ssh_username": "core",
+    "ami_name": "conjur-{{user `appliance_image_tag`}}-{{timestamp}}",
     "launch_block_device_mappings": [{
-      "device_name": "/dev/sda1",
+      "device_name": "/dev/xvda",
       "delete_on_termination": true,
-      "volume_size": 20
-    }]
+      "volume_size": 10
+    }],
+    "tags": {
+      "conjur/version": "{{user `appliance_image_tag`}}",
+      "created": "{{timestamp}}"
+    }
   }],
   "provisioners": [
     {
       "type": "file",
       "source": "conjur-appliance.tar.gz",
-      "destination": "/tmp/conjur-appliance.tar.gz"
+      "destination": "/home/core/conjur-appliance.tar.gz"
     },
     {
       "type": "shell",
-      "scripts": ["scripts/provision.sh"],
-      "environment_vars": ["APPLIANCE_IMAGE_TAG={{user `appliance_image_tag`}}"],
+      "scripts": ["scripts/coreos/bootstrap.sh"],
       "execute_command": "{{ .Vars }} sudo -E bash '{{ .Path }}'"
     },
     {
       "type": "shell",
-      "inline": ["rm -f /tmp/conjur-appliance.tar*"]
+      "inline": ["rm -f /home/core/conjur-appliance.tar*"],
+      "execute_command": "{{ .Vars }} sudo -E bash '{{ .Path }}'"
     }
   ]
 }

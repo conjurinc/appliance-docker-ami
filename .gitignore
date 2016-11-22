@@ -2,3 +2,5 @@ health.response
 .kitchen
 .vagrant
 *.tar*
+ec2_amazon-ebs.pem
+packer.out
