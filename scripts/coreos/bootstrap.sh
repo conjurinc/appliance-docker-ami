@@ -42,4 +42,9 @@ CONF
 
 systemctl enable /etc/systemd/system/conjur.service
 
+systemctl stop update-engine
+systemctl disable update-engine
+systemctl stop locksmithd
+systemctl disable locksmithd
+
 echo "Conjur container ready"
