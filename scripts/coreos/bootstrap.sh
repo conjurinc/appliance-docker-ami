@@ -46,5 +46,6 @@ systemctl stop update-engine
 systemctl disable update-engine
 systemctl stop locksmithd
 systemctl disable locksmithd
+systemctl daemon-reload
 
 echo "Conjur container ready"
