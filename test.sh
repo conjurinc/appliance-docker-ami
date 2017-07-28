@@ -25,8 +25,8 @@ response_code=$(curl -k -s -o health.response -w "%{http_code}" https://${public
 if [ "${response_code}" != "200" ]; then
   echo "Expected 200"
   echo "Got ${response_code}"
-  echo ""
-  echo $(cat health.response)
+  echo "-----"
+  echo "$(cat health.response)"
   exit 1
 fi
 
