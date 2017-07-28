@@ -10,6 +10,10 @@ if [ ! -f conjur-appliance.tar.gz ]; then
   gzip conjur-appliance.tar
 fi
 
-PACKER_LOG=1 packer build \
+PACKER_LOG=1 summon packer build \
   -var "appliance_image_tag=${APPLIANCE_IMAGE_TAG}" \
   packer.json | tee packer.out
+
+ami_id=$(tail -2 packer.out | head -2 | awk 'match($0, /ami-.*/) { print substr($0, RSTART, RLENGTH) }')
+echo -n "$ami_id" > AMI
+touch $ami_id
