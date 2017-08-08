@@ -13,7 +13,6 @@ fi
 export PACKER_LOG=1
 # summon packer build -var "appliance_image_tag=$TAG" packer.json | tee packer.out
 summon docker run \
-    -it \
     -v $(pwd):/opt/ \
     --env-file @SUMMONENVFILE \
     hashicorp/packer:light build -var "appliance_image_tag=$TAG" /opt/packer.json | tee packer.out
