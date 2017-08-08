@@ -11,7 +11,8 @@ if [ ! -f conjur-appliance.tar.gz ]; then
 fi
 
 export PACKER_LOG=1
-summon packer build -var "appliance_image_tag=$TAG" packer.json | tee packer.out
+# summon packer build -var "appliance_image_tag=$TAG" packer.json | tee packer.out
+summon docker run -i -t -v $(pwd):/opt/ hashicorp/packer:light build -var "appliance_image_tag=$TAG" packer.json | tee packer.out
 
 # write the AMI ID to files for smoke tests archiving
 ami_id=$(tail -2 packer.out | head -2 | awk 'match($0, /ami-.*/) { print substr($0, RSTART, RLENGTH) }')
