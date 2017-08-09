@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 # Usage: ./test.sh ami-b13170d4
 
 ami_id=${1}
@@ -55,5 +55,7 @@ if [ "${response_code}" != "200" ]; then
   echo "$(cat health.response)"
   exit 1
 fi
+
+rm -rf .kitchen/logs/
 
 echo "PASSED!"
