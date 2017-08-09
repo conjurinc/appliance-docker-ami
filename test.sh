@@ -56,6 +56,4 @@ if [ "${response_code}" != "200" ]; then
   exit 1
 fi
 
-rm -rf .kitchen/logs/
-
 echo "PASSED!"
