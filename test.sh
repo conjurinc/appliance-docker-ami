@@ -1,18 +1,44 @@
-#!/bin/bash -eu
+#!/bin/bash -ex
 # Usage: ./test.sh ami-b13170d4
 
 ami_id=${1}
 
 finish() {
   code=$?
-  summon env AMI_ID=${ami_id} chef exec kitchen destroy
+  # Bring down the AWS instance
+  summon env AMI_ID=${ami_id} bash -c 'docker run \
+      --rm \
+      -v "$(pwd)":/opt/ \
+      -w /opt/ \
+      -e AMI_ID \
+      -e AWS_ACCESS_KEY_ID \
+      -e AWS_SECRET_ACCESS_KEY \
+      -e COREOS_VERSION \
+      -e COREOS_AMI \
+      -v "$SSH_KEY:/root/.ssh/id_rsa" \
+      test-kitchen kitchen destroy'
+
   return ${code}
 }
 trap finish EXIT
 
+# Create a Test Kitchen container
+docker build -t test-kitchen -f Dockerfile.testkitchen .
+
 echo "Launching test instance from ${ami_id}"
 
-summon env AMI_ID=${ami_id} chef exec kitchen converge
+# Converge Test Kitchen to bring up the CoreOS instance in AWS
+summon env AMI_ID=${ami_id} bash -c 'docker run \
+    --rm \
+    -v "$(pwd)":/opt/ \
+    -w /opt/ \
+    -e AMI_ID \
+    -e AWS_ACCESS_KEY_ID \
+    -e AWS_SECRET_ACCESS_KEY \
+    -e COREOS_VERSION \
+    -e COREOS_AMI \
+    -v "$SSH_KEY:/root/.ssh/id_rsa" \
+    test-kitchen kitchen converge'
 
 echo "Testing health endpoint"
 
