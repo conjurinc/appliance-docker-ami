@@ -11,7 +11,6 @@ if [ ! -f conjur-appliance.tar.gz ]; then
 fi
 
 export PACKER_LOG=1
-# summon packer build -var "appliance_image_tag=$TAG" packer.json | tee packer.out
 summon docker run \
     -v $(pwd):/opt/ \
     --env-file @SUMMONENVFILE \
