@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 # Usage: ./test.sh ami-b13170d4
 
 ami_id=${1}
