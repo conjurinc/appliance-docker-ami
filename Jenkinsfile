@@ -33,6 +33,7 @@ pipeline {
 
   post {
     always {
+      sh 'sudo chown -R jenkins:jenkins .'  // bad docker mount creates unreadable files TODO fix this
       deleteDir()  // delete current workspace, for a clean build
     }
     failure {
