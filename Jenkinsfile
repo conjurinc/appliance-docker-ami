@@ -33,10 +33,7 @@ pipeline {
 
   post {
     always {
-      sh 'docker run -i --rm -v $PWD:/src -w /src alpine/git clean -fxd'
-      // sh 'docker run -i --rm -v $PWD:/opt -w /opt alpine/git clean -fxd'
-      // sh 'sudo chown -R jenkins:jenkins .'  // bad docker mount creates unreadable files TODO fix this
-      // deleteDir()  // delete current workspace, for a clean build
+      sh 'docker run -i --rm -v $PWD:/opt -w /opt alpine/git clean -fxd'
     }
     failure {
       slackSend(color: 'danger', message: "${env.JOB_NAME} #${env.BUILD_NUMBER} FAILURE (<${env.BUILD_URL}|Open>)")
