@@ -1,15 +1,22 @@
 #!/bin/bash
-set -ex
+set -exu
 
-APPLIANCE_IMAGE=${1-registry.tld/conjur-appliance}
-APPLIANCE_IMAGE_TAG=${2-latest}
+IMAGE="$1"  # ex: registry.tld/conjur-appliance:4.9-stable
+TAG="${IMAGE##*:}"
 
 if [ ! -f conjur-appliance.tar.gz ]; then
-  docker pull ${APPLIANCE_IMAGE}:${APPLIANCE_IMAGE_TAG}
-  docker save ${APPLIANCE_IMAGE}:${APPLIANCE_IMAGE_TAG} > conjur-appliance.tar
+  docker pull $IMAGE
+  docker save $IMAGE > conjur-appliance.tar
   gzip conjur-appliance.tar
 fi
 
-PACKER_LOG=1 packer build \
-  -var "appliance_image_tag=${APPLIANCE_IMAGE_TAG}" \
-  packer.json | tee packer.out
+export PACKER_LOG=1
+summon docker run \
+    -v $(pwd):/opt/ \
+    --env-file @SUMMONENVFILE \
+    hashicorp/packer:light build -var "appliance_image_tag=$TAG" /opt/packer.json | tee packer.out
+
+# write the AMI ID to files for smoke tests archiving
+ami_id=$(tail -2 packer.out | head -2 | awk 'match($0, /ami-.*/) { print substr($0, RSTART, RLENGTH) }')
+echo -n "$ami_id" > AMI
+touch $ami_id

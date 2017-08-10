@@ -29,12 +29,12 @@
   "provisioners": [
     {
       "type": "file",
-      "source": "conjur-appliance.tar.gz",
+      "source": "/opt/conjur-appliance.tar.gz",
       "destination": "/home/core/conjur-appliance.tar.gz"
     },
     {
       "type": "shell",
-      "scripts": ["scripts/coreos/bootstrap.sh"],
+      "scripts": ["/opt/scripts/coreos/bootstrap.sh"],
       "execute_command": "{{ .Vars }} sudo -E bash '{{ .Path }}'"
     },
     {
