@@ -1,5 +1,5 @@
 #!/bin/bash
-set -exu
+set -exuo pipefail
 
 IMAGE="$1"  # ex: registry.tld/conjur-appliance:4.9-stable
 TAG="${IMAGE##*:}"
@@ -10,10 +10,28 @@ if [ ! -f conjur-appliance.tar.gz ]; then
   gzip conjur-appliance.tar
 fi
 
+echo "Fetching latest CoreOS AMI..."
+export COREOS_AMI=$(summon docker run --rm --env-file @SUMMONENVFILE \
+  mesosphere/aws-cli ec2 describe-images --filters '[
+    {"Name": "owner-id", "Values": ["595879546273"] },
+    {"Name": "name", "Values": ["CoreOS-stable*"] },
+    {"Name": "virtualization-type", "Values": ["hvm"] },
+    {"Name": "architecture", "Values": ["x86_64"] },
+    {"Name": "hypervisor", "Values": ["xen"] },
+    {"Name": "root-device-type", "Values": ["ebs"] },
+    {"Name": "state", "Values": ["available"] }
+    ]' \
+    --query 'reverse(sort_by(Images, &CreationDate))[:1].ImageId | [0]' \
+    --region us-east-1 \
+    --output text
+  )
+echo "CoreOS AMI: $COREOS_AMI"
+echo "Starting build"
+
 export PACKER_LOG=1
 summon docker run \
     -v $(pwd):/opt/ \
-    --env-file @SUMMONENVFILE \
+    --env-file @SUMMONENVFILE -e COREOS_AMI \
     hashicorp/packer:light build -var "appliance_image_tag=$TAG" /opt/packer.json | tee packer.out
 
 # write the AMI ID to files for smoke tests archiving
