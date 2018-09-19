@@ -4,3 +4,5 @@ health.response
 *.tar*
 ec2_amazon-ebs.pem
 packer.out
+ami-*
+/AMI
