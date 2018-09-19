@@ -20,7 +20,7 @@ finish() {
 
   return ${code}
 }
-#trap finish EXIT
+trap finish EXIT
 
 # Create a Test Kitchen container
 docker build -t test-kitchen -f Dockerfile.testkitchen .
