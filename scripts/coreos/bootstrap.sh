@@ -22,7 +22,12 @@ cid=$(docker create \
 --log-driver=journald \
 -v /var/log/conjur:/var/log/conjur \
 -v /opt/conjur/backup:/opt/conjur/backup \
--p "443:443" -p "636:636" -p "5432:5432" -p "5433:5433" -p "127.0.0.1:38053:38053" \
+-p "443:443" \
+-p "636:636" \
+-p "5432:5432" \
+-p "5433:5433" \
+-p "1999:1999" \
+-p "127.0.0.1:38053:38053" \
 $image_id)
 
 cat << CONF > /etc/systemd/system/conjur.service
