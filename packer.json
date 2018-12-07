@@ -19,7 +19,8 @@
     "launch_block_device_mappings": [{
       "device_name": "/dev/xvda",
       "delete_on_termination": true,
-      "volume_size": 10
+      "volume_size": 10,
+      "volume_type": "gp2"
     }],
     "tags": {
       "conjur/version": "{{user `appliance_image_tag`}}",
