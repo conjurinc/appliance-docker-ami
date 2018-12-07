@@ -12,7 +12,7 @@ pipeline {
     string(
       name: 'IMAGE',
       description: 'Docker image to load into the AMI',
-      defaultValue: 'registry.tld/conjur-appliance:4.9-stable'
+      defaultValue: 'registry.tld/conjur-appliance:5.0-stable'
     )
   }
 
