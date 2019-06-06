@@ -14,7 +14,7 @@ RUN apk update && \
 
 RUN update-ca-certificates
 
-RUN gem install test-kitchen kitchen-ec2 berkshelf:7.0.8 rspec-retry --no-document
+RUN gem install test-kitchen kitchen-ec2 berkshelf:6.3.2 rspec-retry --no-document
 
 RUN mkdir -p /src
 ENTRYPOINT []
