@@ -1,7 +1,7 @@
 FROM mesosphere/aws-cli
 MAINTAINER Jason Vanderhoof <jason.vanderhoof@cyberark.com>
 
-ENV BUILD_DEPENDENCIES libffi-dev openssl ca-certificates
+ENV BUILD_DEPENDENCIES libffi-dev openssl ca-certificates linux-headers
 ENV RUBY_PACKAGES ruby ruby-dev ruby-rdoc ruby-irb build-base ruby-io-console
 
 # Update and install all of the required packages.
