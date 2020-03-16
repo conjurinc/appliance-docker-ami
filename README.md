@@ -82,29 +82,12 @@ To view the container's logs use `journalctl`:
 journalctl CONTAINER_NAME=conjur-appliance
 ```
 
-## Development
+## Contributing
 
-You can test these scripts locally against a VM with Vagrant. Ensure you have
-`conjur-appliance.tar.gz` in your project directory and run `vagrant up`.
+We welcome contributions of all kinds to this repository. For instructions on
+how to get started and descriptions of our development workflows, please see our
+[contributing guide](CONTRIBUTING.md).
 
-Vagrant will:
+## License
 
-1. Copy `conjur-appliance.tar.gz` into the VM.
-2. Run bootstrap scripts.
-
-## Testing
-
-Tests are run using [test-kitchen](http://kitchen.ci/). Install the [ChefDK](https://downloads.chef.io/chef-dk/) (bundles test-kitchen) to run tests locally.
-
-Run a test against a created AMI like so:
-
-```
-./test.sh <AMI_ID>
-```
-
-This will:
-
-1. Spin up an EC2 instance of the AMI.
-2. Run [bootstrap.sh](bootstrap.sh) to configure the Conjur container.
-3. curl the health endpoint to make sure all is okay.
-4. Terminate the EC2 instance.
+This repository is licensed under the MIT license - see [`LICENSE`](LICENSE) for more details.
