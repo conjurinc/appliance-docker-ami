@@ -1,21 +1,24 @@
 #!/bin/bash
 set -e
 
-if ! docker images | grep conjur; then
-  echo "Loading Conjur appliance image into Docker"
-  gzip -df /home/core/conjur-appliance.tar.gz # Unzip the tar.gz into a tar
-  docker load -i /home/core/conjur-appliance.tar
+amazon-linux-extras install -y docker
+systemctl enable docker
+systemctl start docker
+
+if ! docker images | grep appliance; then
+  echo "Loading DAP appliance image into Docker"
+  docker load -i /opt/dap-appliance.tar.gz
 fi
 
 image_id=$(docker images -q)
-container_name='conjur-appliance'
+container_name='dap-appliance'
 
 docker rm -f ${container_name} > /dev/null 2>&1 || true
 
 mkdir -p /var/log/conjur
 mkdir -p /opt/conjur/backup
 
-echo "Creating Conjur container"
+echo "Creating DAP container"
 cid=$(docker create \
 --name ${container_name} \
 --privileged --restart always \
@@ -23,6 +26,7 @@ cid=$(docker create \
 -v /var/log/conjur:/var/log/conjur \
 -v /opt/conjur/backup:/opt/conjur/backup \
 -p "443:443" \
+-p "444:444" \
 -p "636:636" \
 -p "5432:5432" \
 -p "5433:5433" \
@@ -30,9 +34,9 @@ cid=$(docker create \
 -p "127.0.0.1:38053:38053" \
 $image_id)
 
-cat << CONF > /etc/systemd/system/conjur.service
+cat << CONF > /etc/systemd/system/dap.service
 [Unit]
-Description=Conjur
+Description=DAP
 After=docker.service
 Requires=docker.service
 
@@ -45,15 +49,8 @@ ExecStop=-/usr/bin/docker stop ${container_name}
 WantedBy=multi-user.target
 CONF
 
-systemctl enable /etc/systemd/system/conjur.service
+systemctl enable /etc/systemd/system/dap.service
 
-# stop, disable and mask update services
-systemctl stop update-engine
-systemctl disable update-engine
-systemctl mask update-engine
-systemctl stop locksmithd
-systemctl disable locksmithd
-systemctl mask locksmithd
 systemctl daemon-reload
 
-echo "Conjur container ready"
+echo "DAP container ready (reboot, or use 'systemctl start dap' to start)"

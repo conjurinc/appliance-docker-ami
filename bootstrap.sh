@@ -13,4 +13,4 @@ password=TestingAMI-12!
 orgaccount=kitchen
 
 echo "Configuring for master..."
-docker exec conjur-appliance evoke configure master --accept-eula -h $hostname -p $password $orgaccount
+docker exec dap-appliance evoke configure master --accept-eula -h $hostname -p $password $orgaccount

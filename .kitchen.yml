@@ -2,29 +2,30 @@
 ---
 driver:
   name: ec2
-  security_group_ids: ['sg-45fdda28']
+  security_group_ids: ['sg-5739cc20']
+  subnet_id: subnet-a9c7b484
   region: us-east-1
   aws_ssh_key_id: test-kitchen
   require_chef_omnibus: false
-  instance_type: m3.large
+  instance_type: m5.xlarge
   tags:
     kitchen-test: "appliance-docker"
 
 transport:
   ssh_key: <%= ENV['SSH_KEY'] %>
-  username: core
+  username: ec2-user
 
 provisioner:
   name: shell
 
 platforms:
-  - name: coreos-stable
+  - name: amazon-linux-2
     driver:
       image_id: <%= ENV['AMI_ID'] %>
       block_device_mappings:
         - device_name: /dev/xvda
           ebs:
-            volume_size: 20
+            volume_size: 100
             delete_on_termination: true
 
 suites:

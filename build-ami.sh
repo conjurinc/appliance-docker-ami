@@ -1,20 +1,19 @@
 #!/bin/bash
 set -exuo pipefail
 
-IMAGE="$1"  # ex: registry.tld/conjur-appliance:4.9-stable
+IMAGE="$1"  # ex: registry.tld/conjur-appliance:5.0-stable
 TAG="${IMAGE##*:}"
 
-if [ ! -f conjur-appliance.tar.gz ]; then
+if [ ! -f dap-appliance.tar.gz ]; then
   docker pull $IMAGE
-  docker save $IMAGE > conjur-appliance.tar
-  gzip conjur-appliance.tar
+  docker save $IMAGE | gzip > dap-appliance.tar.gz
 fi
 
-echo "Fetching latest CoreOS AMI..."
-export COREOS_AMI=$(summon docker run --rm --env-file @SUMMONENVFILE \
+echo "Fetching latest Amazon Linux 2 AMI..."
+export AMI=$(summon docker run --rm -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY \
   mesosphere/aws-cli ec2 describe-images --filters '[
-    {"Name": "owner-id", "Values": ["595879546273"] },
-    {"Name": "name", "Values": ["CoreOS-stable*"] },
+    {"Name": "owner-id", "Values": ["137112412989"] },
+    {"Name": "name", "Values": ["amzn2-ami-hvm-2.0*"] },
     {"Name": "virtualization-type", "Values": ["hvm"] },
     {"Name": "architecture", "Values": ["x86_64"] },
     {"Name": "hypervisor", "Values": ["xen"] },
@@ -25,13 +24,13 @@ export COREOS_AMI=$(summon docker run --rm --env-file @SUMMONENVFILE \
     --region us-east-1 \
     --output text
   )
-echo "CoreOS AMI: $COREOS_AMI"
+echo "AMI: $AMI"
 echo "Starting build"
 
 export PACKER_LOG=1
 summon docker run \
     -v $(pwd):/opt/ \
-    --env-file @SUMMONENVFILE -e COREOS_AMI \
+    -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e SSH_KEY -e AMI \
     hashicorp/packer:light build -var "appliance_image_tag=$TAG" /opt/packer.json | tee packer.out
 
 # write the AMI ID to files for smoke tests archiving

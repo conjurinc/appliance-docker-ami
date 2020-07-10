@@ -40,7 +40,7 @@ summon env AMI_ID=${ami_id} bash -c 'docker run \
 
 echo "Testing health endpoint"
 
-public_hostname=$(cat .kitchen/default-coreos-stable.yml | grep hostname | awk -F ' ' '{print $2}')
+public_hostname=$(cat .kitchen/default-amazon-linux-2.yml | grep hostname | awk -F ' ' '{print $2}')
 
 sleep 5
 
