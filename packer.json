@@ -34,8 +34,9 @@
       "destination": "/tmp/dap-appliance.tar.gz"
     },
     {
-      "type": "shell",
-      "inline": ["sudo mv /tmp/dap-appliance.tar.gz /opt/"]
+      "type": "file",
+      "source": "/opt/seccomp.json",
+      "destination": "/tmp/seccomp.json"
     },
     {
       "type": "file",
@@ -44,11 +45,14 @@
     },
     {
       "type": "shell",
-      "inline": ["sudo mv /tmp/dap-ami-bootstrap.sh /opt/"]
-    },
-    {
-      "type": "shell",
-      "inline": ["sudo bash /opt/dap-ami-bootstrap.sh"]
+      "inline": [
+        "mv /tmp/dap-appliance.tar.gz /opt/",
+        "mv /tmp/dap-ami-bootstrap.sh /opt/",
+        "mkdir -p /opt/cyberark/dap/security",
+        "mv /tmp/seccomp.json /opt/cyberark/dap/security/",
+        ". /opt/dap-ami-bootstrap.sh"
+      ],
+      "execute_command": "sudo bash {{.Path}}"
     }
   ]
 }
