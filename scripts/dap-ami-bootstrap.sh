@@ -15,23 +15,25 @@ container_name='dap'
 
 docker rm -f ${container_name} > /dev/null 2>&1 || true
 
-mkdir -p /var/log/conjur
-mkdir -p /opt/conjur/backup
+mkdir -p /var/log/dap
+mkdir -p /opt/cyberark/dap/{security,configuration,backup,seeds}
 
 echo "Creating DAP container"
 cid=$(docker create \
 --name ${container_name} \
---privileged --restart unless-stopped \
+--restart unless-stopped \
+--detach \
 --log-driver=journald \
---volume /var/log/conjur:/var/log/conjur:Z \
---volume /opt/conjur/backup:/opt/conjur/backup:Z \
---volume /opt/cyberark/dap/security:/opt/cyberark/dap/security:Z \
 --security-opt seccomp:/opt/cyberark/dap/security/seccomp.json \
+--volume /opt/cyberark/dap/configuration:/opt/cyberark/dap/configuration:Z \
+--volume /opt/cyberark/dap/security:/opt/cyberark/dap/security:Z \
+--volume /opt/cyberark/dap/backups:/opt/conjur/backup:Z \
+--volume /opt/cyberark/dap/seeds:/opt/cyberark/dap/seeds:Z \
+--volume /var/log/dap:/var/log/conjur:Z \
 --publish "443:443" \
 --publish "444:444" \
---publish "5432:5432" \
---publish "5433:5433" \
 --publish "1999:1999" \
+--publish "5432:5432" \
 $image_id)
 
 cat << CONF > /etc/systemd/system/dap.service

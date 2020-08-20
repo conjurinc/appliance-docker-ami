@@ -35,8 +35,13 @@
     },
     {
       "type": "file",
-      "source": "/opt/seccomp.json",
+      "source": "/opt/files/seccomp.json",
       "destination": "/tmp/seccomp.json"
+    },
+    {
+      "type": "file",
+      "source": "/opt/files/configuration.json",
+      "destination": "/tmp/configuration.json"
     },
     {
       "type": "file",
@@ -49,6 +54,7 @@
         "mv /tmp/dap-appliance.tar.gz /opt/",
         "mv /tmp/dap-ami-bootstrap.sh /opt/",
         "mkdir -p /opt/cyberark/dap/security",
+        "mv /tmp/seccomp.json /opt/cyberark/dap/security/",
         "mv /tmp/seccomp.json /opt/cyberark/dap/security/",
         ". /opt/dap-ami-bootstrap.sh"
       ],
