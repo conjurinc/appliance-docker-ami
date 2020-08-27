@@ -12,13 +12,13 @@ driver:
 
 transport:
   ssh_key: <%= ENV['SSH_KEY'] %>
-  username: core
+  username: ec2-user
 
 provisioner:
   name: shell
 
 platforms:
-  - name: coreos-stable
+  - name: amazon-linux-2
     driver:
       image_id: <%= ENV['AMI_ID'] %>
       block_device_mappings:

@@ -34,7 +34,7 @@ To build an AMI, run:
 
 The positional arguments (image, tag) are optional; defaults are shown above.
 
-Our AMIs are now based on [CoreOS](https://coreos.com/os/docs/latest/).
+Our AMIs are now based on [Amazon Linux 2](https://aws.amazon.com/amazon-linux-2/).
 [Read more below]().
 
 ### OpenStack
@@ -52,11 +52,9 @@ Given a Conjur Docker image, `conjur-appliance.tar.gz`, packer runs
 1. Creates a container from the Conjur Docker image
 2. Creates and enables a service that will start this container on system boot
 
-### CoreOS
+### Amazon Linux 2
 
-CoreOS is our preferred OS. The CoreOS version and AMI we use are in [secrets.yml](secrets.yml). These are not secrets, but putting them here makes it easy to pass them into packer and test-kitchen.
-
-CoreOS uses [systemd](https://coreos.com/docs/launching-containers/launching/getting-started-with-systemd/) as its init system. The name of the service that runs the Conjur container is `conjur.service`.
+Amazon Linux 2 is our preferred OS. We use the latest version at time of build. The name of the service that runs the Conjur container is `conjur.service`.
 
 #### Service Management
 
