@@ -1,10 +1,19 @@
 #!/bin/bash
 set -e
 
+systemctl stop rpcbind
+systemctl mask rpcbind
+systemctl stop rpcbind.socket
+systemctl mask rpcbind.socket
+
+amazon-linux-extras install -y docker
+systemctl enable docker
+systemctl start docker
+
 if ! docker images | grep conjur; then
   echo "Loading Conjur appliance image into Docker"
-  gzip -df /home/core/conjur-appliance.tar.gz # Unzip the tar.gz into a tar
-  docker load -i /home/core/conjur-appliance.tar
+  gzip -df /home/ec2-user/conjur-appliance.tar.gz # Unzip the tar.gz into a tar
+  docker load -i /home/ec2-user/conjur-appliance.tar
 fi
 
 image_id=$(docker images -q)
@@ -45,15 +54,10 @@ ExecStop=-/usr/bin/docker stop ${container_name}
 WantedBy=multi-user.target
 CONF
 
+systemctl daemon-reload
+
+
 systemctl enable /etc/systemd/system/conjur.service
 
-# stop, disable and mask update services
-systemctl stop update-engine
-systemctl disable update-engine
-systemctl mask update-engine
-systemctl stop locksmithd
-systemctl disable locksmithd
-systemctl mask locksmithd
-systemctl daemon-reload
 
 echo "Conjur container ready"

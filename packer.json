@@ -2,7 +2,7 @@
   "variables": {
     "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
     "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
-    "source_ami": "{{env `COREOS_AMI`}}",
+    "source_ami": "{{env `AMI`}}",
     "appliance_image_tag": null,
     "instance_type": "m3.medium"
   },
@@ -14,7 +14,7 @@
     "region": "us-east-1",
     "source_ami": "{{user `source_ami`}}",
     "instance_type": "{{user `instance_type`}}",
-    "ssh_username": "core",
+    "ssh_username": "ec2-user",
     "ami_name": "CyberArk-DAP-{{user `appliance_image_tag`}}-{{timestamp}}",
     "launch_block_device_mappings": [{
       "device_name": "/dev/xvda",
@@ -31,16 +31,16 @@
     {
       "type": "file",
       "source": "/opt/conjur-appliance.tar.gz",
-      "destination": "/home/core/conjur-appliance.tar.gz"
+      "destination": "/home/ec2-user/conjur-appliance.tar.gz"
     },
     {
       "type": "shell",
-      "scripts": ["/opt/scripts/coreos/bootstrap.sh"],
+      "scripts": ["/opt/scripts/bootstrap.sh"],
       "execute_command": "{{ .Vars }} sudo -E bash '{{ .Path }}'"
     },
     {
       "type": "shell",
-      "inline": ["rm -f /home/core/conjur-appliance.tar*"],
+      "inline": ["rm -f /home/ec2-user/conjur-appliance.tar*"],
       "execute_command": "{{ .Vars }} sudo -E bash '{{ .Path }}'"
     }
   ]
