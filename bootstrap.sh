@@ -1,6 +1,7 @@
 #!/bin/bash -e
 
 # Used by test-kitchen, converge looks for 'bootstrap.sh' by default
+# Runs via sudo by default
 
 echo "Running bootstrap.sh..."
 

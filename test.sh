@@ -27,7 +27,7 @@ docker build -t test-kitchen -f Dockerfile.testkitchen .
 
 echo "Launching test instance from ${ami_id}"
 
-# Converge Test Kitchen to bring up the CoreOS instance in AWS
+# Converge Test Kitchen to bring up the AL2 instance in AWS
 summon env AMI_ID=${ami_id} bash -c 'docker run \
     --rm \
     -v "$(pwd)":/opt/ \
