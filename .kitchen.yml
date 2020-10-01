@@ -16,6 +16,7 @@ transport:
 
 provisioner:
   name: shell
+  sudo: false
 
 platforms:
   - name: amazon-linux-2

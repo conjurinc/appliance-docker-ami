@@ -3,7 +3,7 @@
 # Used by test-kitchen, converge looks for 'bootstrap.sh' by default
 # Runs via sudo by default
 
-echo "Running bootstrap.sh..."
+echo "Running bootstrap.sh as ${USER}..."
 
 echo "Waiting for container to be ready (TODO switch to polling)"
 sleep 60

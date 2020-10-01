@@ -10,6 +10,8 @@ amazon-linux-extras install -y docker
 systemctl enable docker
 systemctl start docker
 
+usermod --append --groups docker ec2-user
+
 if ! docker images | grep conjur; then
   echo "Loading Conjur appliance image into Docker"
   gzip -df /home/ec2-user/conjur-appliance.tar.gz # Unzip the tar.gz into a tar
