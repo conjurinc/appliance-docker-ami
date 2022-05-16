@@ -22,7 +22,7 @@ export AMI=$(summon docker run --rm --env-file @SUMMONENVFILE \
     {"Name": "state", "Values": ["available"] }
     ]' \
     --query 'reverse(sort_by(Images, &CreationDate))[:1].ImageId | [0]' \
-    --region us-east-1 \
+    --region us-west-2 \
     --output text
   )
 echo "AMI: $AMI"
@@ -35,6 +35,6 @@ summon docker run \
     hashicorp/packer:light build -var "appliance_image_tag=$TAG" /opt/packer.json | tee packer.out
 
 # write the AMI ID to files for smoke tests archiving
-ami_id=$(tail -2 packer.out | head -2 | awk 'match($0, /ami-.*/) { print substr($0, RSTART, RLENGTH) }')
+ami_id=$(tail -3 packer.out | head -2 | awk 'match($0, /ami-.*/) { print substr($0, RSTART, RLENGTH) }')
 echo -n "$ami_id" > AMI
 touch $ami_id

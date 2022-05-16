@@ -9,7 +9,7 @@ echo "Waiting for container to be ready (TODO switch to polling)"
 sleep 60
 
 echo "Fetching instance hostname..."
-hostname=$(curl -s http://169.254.169.254/latest/meta-data/public-hostname)
+hostname=$(curl -s http://169.254.169.254/latest/meta-data/hostname)
 password=TestingAMI-12!
 orgaccount=kitchen
 
