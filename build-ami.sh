@@ -22,7 +22,7 @@ export AMI=$(summon docker run --rm --env-file @SUMMONENVFILE \
     {"Name": "state", "Values": ["available"] }
     ]' \
     --query 'reverse(sort_by(Images, &CreationDate))[:1].ImageId | [0]' \
-    --region us-west-2 \
+    --region us-east-1 \
     --output text
   )
 echo "AMI: $AMI"

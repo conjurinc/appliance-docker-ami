@@ -6,6 +6,7 @@ pipeline {
   options {
     timestamps()
     buildDiscarder(logRotator(numToKeepStr: '30'))
+    lock resource: "appliance-ami-creation"
   }
 
   parameters {
@@ -19,8 +20,14 @@ pipeline {
   stages {
     stage('Create the AMI') {
       steps {
+        sh "summon ./ebs_encryption.sh disable us-east-1"
         sh "./build-ami.sh ${params.IMAGE}"
         archiveArtifacts artifacts: 'AMI,ami-*', fingerprint: true
+      }
+      post {
+        always {
+          sh "summon ./ebs_encryption.sh enable us-east-1"
+        }
       }
     }
 
