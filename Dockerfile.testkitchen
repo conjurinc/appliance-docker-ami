@@ -1,4 +1,4 @@
-FROM mesosphere/aws-cli
+FROM alpine:latest
 MAINTAINER Jason Vanderhoof <jason.vanderhoof@cyberark.com>
 
 ENV BUILD_DEPENDENCIES libffi-dev openssl ca-certificates linux-headers
@@ -8,13 +8,14 @@ ENV RUBY_PACKAGES ruby ruby-dev ruby-rdoc ruby-irb build-base ruby-io-console
 # At the end, remove the apk cache
 RUN apk update && \
     apk upgrade && \
+    apk add aws-cli && \
     apk add $BUILD_DEPENDENCIES && \
     apk add $RUBY_PACKAGES && \
     rm -rf /var/cache/apk/*
 
 RUN update-ca-certificates
 
-RUN gem install test-kitchen kitchen-ec2 berkshelf:6.3.2 rspec-retry --no-document
+RUN gem install test-kitchen kitchen-ec2 berkshelf rspec-retry --no-document
 
 RUN mkdir -p /src
 ENTRYPOINT []

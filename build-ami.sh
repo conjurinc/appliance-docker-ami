@@ -32,9 +32,9 @@ export PACKER_LOG=1
 summon docker run \
     -v $(pwd):/opt/ \
     --env-file @SUMMONENVFILE -e AMI \
-    hashicorp/packer:light build -var "appliance_image_tag=$TAG" /opt/packer.json | tee packer.out
+    hashicorp/packer:full build -var "appliance_image_tag=$TAG" /opt/packer.json | tee packer.out
 
 # write the AMI ID to files for smoke tests archiving
-ami_id=$(tail -2 packer.out | head -2 | awk 'match($0, /ami-.*/) { print substr($0, RSTART, RLENGTH) }')
+ami_id=$(tail -3 packer.out | head -2 | awk 'match($0, /ami-.*/) { print substr($0, RSTART, RLENGTH) }')
 echo -n "$ami_id" > AMI
 touch $ami_id

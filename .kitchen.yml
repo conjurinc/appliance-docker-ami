@@ -2,7 +2,9 @@
 ---
 driver:
   name: ec2
-  security_group_ids: ['sg-45fdda28']
+  security_group_ids: ['sg-0892691752769d8ec']
+  subnet_id: subnet-3202bb0e
+  vpc_id: vpc-36803e50
   region: us-east-1
   aws_ssh_key_id: test-kitchen
   require_chef_omnibus: false

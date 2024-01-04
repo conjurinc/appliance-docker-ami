@@ -14,6 +14,8 @@
     "region": "us-east-1",
     "source_ami": "{{user `source_ami`}}",
     "instance_type": "{{user `instance_type`}}",
+    "vpc_id": "vpc-36803e50",
+    "subnet_id": "subnet-f10c2cb8",
     "ssh_username": "ec2-user",
     "ami_name": "CyberArk-DAP-{{user `appliance_image_tag`}}-{{timestamp}}",
     "launch_block_device_mappings": [{
