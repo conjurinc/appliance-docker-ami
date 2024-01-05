@@ -4,6 +4,7 @@
     "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
     "source_ami": "{{env `AMI`}}",
     "appliance_image_tag": null,
+    "pas_release": null,
     "instance_type": "m3.medium"
   },
   "builders": [{
@@ -26,6 +27,8 @@
     }],
     "tags": {
       "DAP/version": "{{user `appliance_image_tag`}}",
+      "marketplace_version": "{{user `pas_release`}}",
+      "marketplace_component": "conjur_appliance",
       "created": "{{timestamp}}"
     }
   }],
