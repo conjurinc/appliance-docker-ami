@@ -4,11 +4,14 @@
     "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
     "source_ami": "{{env `AMI`}}",
     "appliance_image_tag": null,
+    "conjur_version": null,
+    "appliance_version": null,
+    "pas_version": null,
     "instance_type": "m3.medium"
   },
   "builders": [{
     "type": "amazon-ebs",
-    "ami_description": "Official CyberArk DAP AMI",
+    "ami_description": "Official CyberArk Conjur Enterprise AMI",
     "access_key": "{{user `aws_access_key`}}",
     "secret_key": "{{user `aws_secret_key`}}",
     "region": "us-east-1",
@@ -17,7 +20,7 @@
     "vpc_id": "vpc-36803e50",
     "subnet_id": "subnet-f10c2cb8",
     "ssh_username": "ec2-user",
-    "ami_name": "CyberArk-DAP-{{user `appliance_image_tag`}}-{{timestamp}}",
+    "ami_name": "CyberArk-Conjur-Enterprise-{{user `appliance_image_tag`}}-{{timestamp}}",
     "launch_block_device_mappings": [{
       "device_name": "/dev/xvda",
       "delete_on_termination": true,
@@ -25,7 +28,12 @@
       "volume_type": "gp2"
     }],
     "tags": {
-      "DAP/version": "{{user `appliance_image_tag`}}",
+      "docker_tag": "{{user `appliance_image_tag`}}",
+      "conjur_version": "{{user `conjur_version`}}",
+      "appliance_version": "{{user `appliance_version`}}",
+      "pas_version": "{{user `pas_version`}}",
+      "marketplace_version": "{{user `pas_version`}}",
+      "marketplace_component": "conjur_appliance",
       "created": "{{timestamp}}"
     }
   }],
