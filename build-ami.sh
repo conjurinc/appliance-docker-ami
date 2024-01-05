@@ -8,7 +8,19 @@ if [ ! -f conjur-appliance.tar.gz ]; then
   docker pull $IMAGE
   docker save $IMAGE > conjur-appliance.tar
   gzip conjur-appliance.tar
+else
+  # If we didn't pull the docker image because
+  # an archive existed locally, load it
+  # so we can extract the pas releas file.
+  IMAGE="$(docker load < conjur-appliance.tar.gz|sed 's/^Loaded image: //')"
 fi
+
+# Extract pas_release from the docker image
+pas_release="$(docker run \
+  --rm \
+  --entrypoint bash \
+  ${IMAGE} \
+    -c 'cat /opt/conjur/etc/PAS_RELEASE')"
 
 echo "Fetching latest Amazon Linux 2 AMI..."
 export AMI=$(summon docker run --rm --env-file @SUMMONENVFILE \
@@ -32,7 +44,11 @@ export PACKER_LOG=1
 summon docker run \
     -v $(pwd):/opt/ \
     --env-file @SUMMONENVFILE -e AMI \
-    hashicorp/packer:full build -var "appliance_image_tag=$TAG" /opt/packer.json | tee packer.out
+    hashicorp/packer:full build \
+      -var "appliance_image_tag=$TAG" \
+      -var "pas_release=${pas_release}" \
+      /opt/packer.json \
+        | tee packer.out
 
 # write the AMI ID to files for smoke tests archiving
 ami_id=$(tail -3 packer.out | head -2 | awk 'match($0, /ami-.*/) { print substr($0, RSTART, RLENGTH) }')
